@@ -443,7 +443,12 @@ func (a *App) createMailClients() (err error) {
 	if a.config.MailConfig == nil {
 		if utils.Env("MAIL") != "" {
 			if err := json.Unmarshal([]byte(utils.Env("MAIL")), &a.config.MailConfig); err != nil {
-				return err
+				if strings.Contains(err.Error(), "invalid character '/' looking for beginning of value") {
+					a.Logger().Warn("Please check your system mail config.")
+					a.config.MailConfig = &fs.MailConfig{}
+				} else {
+					return err
+				}
 			}
 		} else {
 			a.config.MailConfig = &fs.MailConfig{}
