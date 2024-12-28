@@ -2,7 +2,6 @@ package rclonefs
 
 import (
 	"errors"
-	"path"
 	"path/filepath"
 
 	"github.com/fastschema/fastschema/fs"
@@ -40,8 +39,9 @@ func NewFromConfig(diskConfigs []*fs.DiskConfig, localRoot string) ([]fs.Disk, e
 			// if diskConfig.Root is not an absolute path
 			// we need to join it with localRoot
 			if !filepath.IsAbs(diskConfig.Root) {
-				diskConfig.Root = path.Join(localRoot, diskConfig.Root)
+				diskConfig.Root = filepath.Join(localRoot, diskConfig.Root)
 			}
+			diskConfig.Root = filepath.ToSlash(diskConfig.Root)
 
 			localDisk, err := NewLocal(&RcloneLocalConfig{
 				Name:       diskConfig.Name,

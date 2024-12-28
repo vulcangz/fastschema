@@ -6,6 +6,7 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -26,6 +27,7 @@ func (r *BaseRcloneDisk) Put(ctx context.Context, file *fs.File) (*fs.File, erro
 	if file.Path == "" {
 		file.Path = r.UploadFilePath(file.Name)
 	}
+	file.Path = filepath.ToSlash(file.Path)
 
 	newFile, err := r.PutReader(ctx, file.Reader, file.Size, file.Type, file.Path)
 	if err != nil {
