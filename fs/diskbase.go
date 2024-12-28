@@ -2,7 +2,7 @@ package fs
 
 import (
 	"fmt"
-	"path"
+	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
@@ -64,8 +64,7 @@ func (r *DiskBase) UploadFilePath(filename string) string {
 	filename = filenameRemoveCharsRegexp.ReplaceAllString(filename, "-")
 	filename = dashRegexp.ReplaceAllString(filename, "-")
 	filename = strings.ReplaceAll(filename, "-.", ".")
-	return path.Join(
-		r.Root,
+	return filepath.Join(
 		strconv.Itoa(now.Year()),
 		fmt.Sprintf("%02d", int(now.Month())),
 		fmt.Sprintf("%d_%s", now.UnixMicro(), filename),
